@@ -13,7 +13,6 @@ class CoursesListPage(BasePage):
     def __init__(self, page: Page):
         super().__init__(page)
 
-        # Заменили локаторы на компонент
         self.toolbar_view = CoursesListToolbarViewComponent(page)
         self.course_view = CourseViewComponent(page)
         self.navbar = NavbarComponent(page)
