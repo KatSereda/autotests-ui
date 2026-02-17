@@ -1,3 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","2339","Registration with correct email, username and password","LMS system","2026-02-17","passed","2026-02-17","Registration","Authentication","",""
-"","1710","Registration with correct email, username and password","LMS system","2026-02-17","passed","2026-02-17","Registration","Authentication","",""
