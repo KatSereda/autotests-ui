@@ -38,13 +38,14 @@ jobs:
           name: allure-results
           path: allure-results
 
+
   publish-report:
     if: always()
     needs: [ run-tests ]
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository
+      - name: Check out gh-pages branch
         uses: actions/checkout@v4
         with:
           ref: gh-pages
@@ -56,15 +57,22 @@ jobs:
           name: allure-results
           path: allure-results
 
-      - name: Generates Allure Report with history
-        uses: simple-elf/allure-report-action@v1.9
-        if: always()
-        with:
-          allure_results: allure-results
-          allure_history: allure-history
+      - name: Install Java
+        run: sudo apt-get update && sudo apt-get install -y default-jre
 
-      - name: Deploy report to Github Pages
-        if: always()
+      - name: Install Allure CLI
+        run: npm install -g allure-commandline --save-dev
+
+      - name: Prepare history
+        run: |
+          mkdir -p allure-history
+          if [ -d gh-pages ]; then cp -r gh-pages/* allure-history || true; fi
+
+      - name: Generate Allure report
+        run: |
+          allure generate allure-results --clean -o allure-history
+
+      - name: Deploy report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
