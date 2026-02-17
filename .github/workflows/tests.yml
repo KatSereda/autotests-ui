@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out gh-pages branch
+      - name: Check out repository
         uses: actions/checkout@v4
         with:
           ref: gh-pages
@@ -57,18 +57,15 @@ jobs:
           name: allure-results
           path: allure-results
 
-      - name: Generate Allure report via Allure Docker Service CLI
-        run: |
-          mkdir -p allure-history
-          if [ -d gh-pages ]; then cp -r gh-pages/* allure-history || true; fi
+      - name: Generates Allure Report with history
+        uses: simple-elf/allure-report-action@v1.12
+        if: always()
+        with:
+          allure_results: allure-results
+          allure_history: allure-history
 
-          docker run --rm \
-            -v ${{ github.workspace }}/allure-results:/allure-results \
-            -v ${{ github.workspace }}/allure-history:/allure-report \
-            frankescobar/allure-docker-service:2.27.0 \
-            generate --clean
-
-      - name: Deploy report to GitHub Pages
+      - name: Deploy report to Github Pages
+        if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
